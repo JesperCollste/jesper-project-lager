@@ -84,7 +84,7 @@ cars = [
         "quantity": 6
     },
     {
-        "id": 10,
+        "id": 11,
         "name": "Ferrar F40",
         "desc": "Ferrarin som de mäktigaste människorna i världen äger",
         "price": 16400000,
@@ -99,7 +99,7 @@ cars = [
 csv_file_path = "db_cars.csv"
 
 # Write the cars data to a CSV file
-with open(csv_file_path, mode='w', newline='') as file:
+with open(csv_file_path, mode='w', encoding='UTF-8',  newline='') as file:
     writer = csv.DictWriter(file, fieldnames=["id", "name", "desc", "price", "quantity"])
     writer.writeheader()  # Write the header row
     writer.writerows(cars)  # Write the product data
@@ -107,7 +107,7 @@ with open(csv_file_path, mode='w', newline='') as file:
 print(f"Data successfully saved to {csv_file_path}")
 
 def save_data(filename, cars):
-    with open(filename, mode='w', newline='') as file:
+    with open(filename, mode='w', encoding='UTF-8', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=["id", "name", "desc", "price", "quantity"])
         writer.writeheader() 
         writer.writerows(cars)  

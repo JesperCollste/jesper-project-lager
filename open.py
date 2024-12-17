@@ -90,53 +90,56 @@ def trim_text(text, length=25): #Funktion för att göra så ifall beskrivningen
         return text if len(text) <= length else text[:length] + "..." 
 
 
-def view_inventory(cars, sort_by_price=False): #Sätter sort by price till false från början sen får man ändra det till true i huvudkoden
-    
-    def get_price(car): #Hjälp funktion för att få priset till sort_by_price funktionen
+def view_inventory(cars, sort_by_price=False): 
+    def get_price(car):  # Hjälpfunktion för att få priset
         return car['price']
 
-    #Sort_by_price är falsk från början ifall man inte väljer S i huvudkoden vilket då använder koden
     if sort_by_price:
         cars = sorted(cars, key=get_price)
-   
-    # Skapa sidhuvudet av tabellen:
-    header = f"{'#':<5} {'NAMN':<30} {'BESKRIVNING':<25} {'PRIS':<20} {'KVANTITET':<10}"
-    separator = "-" * 95  # för att göra det finare
-    
-    # Rader för varje bil:
+
+    # Skapa tabellens header
+    header = f"{'ID':<5} {'NAMN':<30} {'BESKRIVNING':<25} {'PRIS':>10} {'KVANTITET':>20}"
+    separator = "-" * 95  # Skapa en linje för separation
+
+    # Rader för varje bil
     rows = []
 
-    for index, car in enumerate(cars, 1):
+    for car in cars:
+        car_id = car['id']  # Använd det faktiska ID:t från listan
         name = car['name']
-        desc = trim_text(car['desc'])  #Kallar på funktionen för att "trimma" långa descriptions
+        desc = trim_text(car['desc'])  # Trimma beskrivningar som är för långa
         price = locale.currency(car['price'], grouping=True)
         quantity = car['quantity']
 
-        row = f"{index:<5} {name:<30} {desc:<25} {price:<20} {quantity:<10}"
+        row = f"{car_id:<5} {name:<30} {desc:<25} {price:>10} {quantity:>10}"
         rows.append(row)
 
     inventory_table = "\n".join([header, separator] + rows)
-    
-    return f"{inventory_table}"
+
+    return inventory_table
 
 
 
-# Add a new car to the list
+
+
 def add_car(cars, name, desc, price, quantity):
-    max_id = max(cars, key=lambda x: x['id'])
-    id_value = max_id['id']
-    id = id_value + 1  # create unique ID
+    # Hitta det högsta befintliga ID:t
+    max_id = max((car['id'] for car in cars), default=0)
+    new_id = max_id + 1  # Skapa ett nytt unikt ID
 
+    # Lägg till bilen med det nya ID:t
     cars.append(
         {
-            "id": id,
+            "id": new_id,
             "name": name,
             "desc": desc,
             "price": price,
             "quantity": quantity
         }
     )
-    return f"Lade till bilen: {id}"
+    return f"Lade till bilen: {new_id}"
+
+
 
 
 locale.setlocale(locale.LC_ALL, 'sv_SE.UTF-8')
